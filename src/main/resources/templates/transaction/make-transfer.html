@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div>
-                        <form th:object="${transaction}" action="#">
+                        <form th:object="${transaction}" th:action="@{/transfer}" method="post">
                             <div class="row">
                                 <div class="form-group blu-margin">
                                     <label for="sender" class="col-form-label">Sender</label>
@@ -27,20 +27,21 @@
         
                                 <div class="form-group blu-margin">
                                     <label for="receiver" class="col-form-label">Receiver</label>
-                                    <select class="form-control" id="receiver">
+                                    <select class="form-control" id="receiver" th:field="*{receiver}">
                                         <option value="0">Select Account</option>
-                                        <option></option>
+                                        <option th:each="account : ${accounts}" th:value="${account.id}"
+                                                th:text="${account.balance} + '-' + ${account.userId} + '-' + ${account.accountType.name()}"></option>
                                     </select>
                                 </div>
         
                                 <div class="form-group blu-margin">
                                     <label for="amount" class="col-form-label">Amount</label>
-                                    <input type="text" class="form-control" id="amount" placeholder="Amount">
+                                    <input type="text" th:field="*{amount}" class="form-control" id="amount" placeholder="Amount">
                                 </div>
         
                                 <div class="form-group blu-margin">
                                     <label for="message" class="col-form-label">Message</label>
-                                    <input type="text" class="form-control" id="message" placeholder="Message">
+                                    <input th:field="*{message}" type="text" class="form-control" id="message" placeholder="Message">
                                 </div>
                             </div>
                             <div class="row">
@@ -62,16 +63,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr >
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                <tr th:each="lastTransaction : ${lastTransactions}">
+                                    <td th:text="${lastTransaction.sender}"></td>
+                                    <td th:text="${lastTransaction.receiver}"></td>
+                                    <td th:text="${lastTransaction.amount}"></td>
+                                    <td th:text="${lastTransaction.creationDate}"></td>
+                                    <td th:text="${lastTransaction.message}"></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <p class="my-5"><a href="#" class="btn btn-primary">Home Page</a></p>
+                        <p class="my-5"><a th:href="@{/index}" class="btn btn-primary">Home Page</a></p>
                     </div>
                 </div>
             </div>

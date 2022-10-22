@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class TransactionServiceImpl implements TransactionService {
@@ -111,5 +112,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<Transaction> lastTransactionsList() {
         return transactionRepository.lastTransactions();
+    }
+
+    @Override
+    public List<Transaction> findTransactionListById(UUID id) {
+      return transactionRepository.findTransactionListById(id);
+
     }
 }

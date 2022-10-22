@@ -1,5 +1,6 @@
 package com.cydeo.controller;
 
+import com.cydeo.model.Account;
 import com.cydeo.model.Transaction;
 import com.cydeo.service.AccountService;
 import com.cydeo.service.TransactionService;
@@ -7,7 +8,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Date;
+import java.util.UUID;
 
 @Controller
 @AllArgsConstructor
@@ -24,6 +30,24 @@ public class TransactionController {
         model.addAttribute("lastTransactions",transactionService.lastTransactionsList());
 
 
-        return "transaction/make-transfer";
+        return "/transaction/make-transfer";
+    }
+
+    @PostMapping("/transfer")
+    public String transfer(Transaction transaction){
+
+        transactionService.makeTransfer(accountService.retrieveById(transaction.getSender()), accountService.retrieveById(transaction.getReceiver()),
+        transaction.getAmount(),new Date(), transaction.getMessage());
+
+        return "redirect:/make-transfer";
+
+    }
+
+    @GetMapping("/transaction/{id}")
+    public String getTransactions(@PathVariable("id")UUID id,Model model){
+
+        System.out.println(id);
+        model.addAttribute("transactions", transactionService.findTransactionListById(id));
+        return "/transaction/transactions";
     }
 }
