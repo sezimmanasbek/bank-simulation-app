@@ -7,11 +7,13 @@ import com.cydeo.service.TransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.UUID;
 
@@ -34,7 +36,12 @@ public class TransactionController {
     }
 
     @PostMapping("/transfer")
-    public String transfer(Transaction transaction){
+    public String transfer(@Valid Transaction transaction, BindingResult bindingResult, Model model){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("accounts",accountService.listAllAccount());
+            return "/transaction/make-transfer";
+        }
 
         transactionService.makeTransfer(accountService.retrieveById(transaction.getSender()), accountService.retrieveById(transaction.getReceiver()),
         transaction.getAmount(),new Date(), transaction.getMessage());
