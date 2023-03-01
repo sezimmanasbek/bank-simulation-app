@@ -1,20 +1,16 @@
 package com.cydeo.controller;
 
 import com.cydeo.enums.AccountType;
-import com.cydeo.model.Account;
-import com.cydeo.repository.AccountRepository;
+import com.cydeo.dto.AccountDTO;
 import com.cydeo.service.AccountService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -35,25 +31,25 @@ public class AccountController {
 
     @GetMapping("create-form")
     public String createAccount(Model model){
-        model.addAttribute("account", Account.builder().build());
+        model.addAttribute("account", new AccountDTO());
         model.addAttribute("accountTypes", AccountType.values());
 
         return "account/create-account";
     }
 
     @PostMapping("/create")
-    public String insertAccount(@Valid Account account, BindingResult bindingResult, Model model){
+    public String insertAccount(@Valid AccountDTO account, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
 
             model.addAttribute("accountTypes", AccountType.values());
             return "account/create-account";
         }
-        accountService.createNewAccount(account.getBalance(), new Date(),account.getAccountType(), account.getUserId());
+        accountService.createNewAccount(account);
         return "redirect:/index";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteAccount(@PathVariable("id") UUID id){
+    public String deleteAccount(@PathVariable("id") Long id){
        accountService.deleteById(id);
 
         return "redirect:/index";

@@ -30,8 +30,8 @@
                             </thead>
                             <tbody>
                                 <tr th:each="transaction : ${transactions}">
-                                    <td th:text="${transaction.sender}"></td>
-                                    <td th:text="${transaction.receiver}"></td>
+                                    <td th:text="${transaction.sender.id}"></td>
+                                    <td th:text="${transaction.receiver.id}"></td>
                                     <td th:text="${transaction.amount}"></td>
                                     <td th:text="${transaction.creationDate}"></td>
                                     <td th:text="${transaction.message}"></td>

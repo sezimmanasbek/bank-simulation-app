@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 
 <head>
   <meta charset="utf-8">
@@ -15,6 +17,9 @@
 <body>
 <div class="container my-5">
   <div class="row">
+    <div>
+      <a class="dropdown-item" th:href="@{/logout}"><li class="fas fa-power-off mr-2"></li></a>
+    </div>
     <div class="col-md-6">
       <div th:if="${accountList.isEmpty()}">
         <h2 >No Accounts yet!</h2>
@@ -29,7 +34,7 @@
             <th>Balance</th>
             <th>Account Type</th>
             <th>CreationDate</th>
-            <th>Delete</th>
+            <th sec:authorize="hasAnyAuthority('Admin')">Delete</th>
             <th>Account Transactions</th>
           </tr>
           </thead>
@@ -40,7 +45,7 @@
             <td th:text="${account.balance}"></td>
             <td th:text="${account.accountType}"></td>
             <td th:text="${account.creationDate}"></td>
-            <td>
+            <td sec:authorize="hasAnyAuthority('Admin')">
               <a th:if="${account.accountStatus.name() == 'ACTIVE'}" class="btn btn-danger" th:href="@{/delete/{id}(id=${account.id})}">Delete</a>
               <a th:if="${account.accountStatus.name() == 'DELETED'}" class="btn btn-danger disabled" th:href="@{/delete/{id}(id=${account.id})}" disabled="true">Delete</a>
             </td>
@@ -49,7 +54,7 @@
           </tbody>
         </table>
       </div>
-      <p class="my-5"><a th:href="@{/create-form}" class="btn btn-primary">Create Account<i class="fas fa-user-plus ml-2"></i></a></p>
+      <p class="my-5" sec:authorize="hasAnyAuthority('Admin')"><a th:href="@{/create-form}" class="btn btn-primary">Create Account<i class="fas fa-user-plus ml-2"></i></a></p>
       <p class="my-5"><a th:href="@{/make-transfer}" class="btn btn-primary">Make Transfer<i class="fas fa-user-plus ml-2"></i></a></p>
     </div>
   </div>
