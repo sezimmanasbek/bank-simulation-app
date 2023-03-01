@@ -125,12 +125,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionDTO> lastTransactionsList() {
 
-        return transactionRepository.findLastTransaction().stream().map(transaction -> mapper.convert(transaction,new TransactionDTO())).collect(Collectors.toList());
+        return transactionRepository.findLastTenTransactions().stream().map(transaction -> mapper.convert(transaction,new TransactionDTO())).collect(Collectors.toList());
     }
 
     @Override
     public List<TransactionDTO> findTransactionListById(Long id) {
-      return  transactionRepository.findBySenderIdOrReceiverId(id).stream().map(transaction ->  mapper.convert(transaction, new TransactionDTO())).collect(Collectors.toList());
+      return  transactionRepository.findTransactionListById(id).stream().map(transaction ->  mapper.convert(transaction, new TransactionDTO())).collect(Collectors.toList());
 
 
     }

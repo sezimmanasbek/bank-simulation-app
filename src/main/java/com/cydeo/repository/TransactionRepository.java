@@ -38,10 +38,11 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
 //                .collect(Collectors.toList());
 //    }
 
-    List<Transaction> findBySenderIdOrReceiverId(Long id);
+    @Query(value = "SELECT * FROM transactions ORDER BY creation_date DESC LIMIT 10",nativeQuery = true)
+    List<Transaction> findLastTenTransactions();
 
-    @Query(value="SELECT * FROM transactions ORDER BY creation_date DESC LIMIT 10",nativeQuery = true)
-    List<Transaction> findLastTransaction();
+    @Query("SELECT t FROM Transaction t WHERE t.sender.id = ?1 OR t.receiver.id = ?1")
+    List<Transaction> findTransactionListById(Long id);
 
 //    @Query("SELECT t FROM Transaction t WHERE t.sender.id = ?1 OR t.receiver.id = ?1")
 //    List<Transaction> findByReceiverorSenderId(@PathVariable("id")Long id);
